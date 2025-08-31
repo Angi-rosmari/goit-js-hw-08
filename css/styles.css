@@ -43,7 +43,7 @@ li {
   flex-direction: column;
 }
 
-.basicLightbox h1 {
+.basicLightbox.create {
   background-color: rgba(187, 142, 230, 0.185);
   padding: 6px 12px;
   font-size: 40px;
