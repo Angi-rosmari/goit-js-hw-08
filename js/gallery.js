@@ -66,33 +66,38 @@ const images = [
 
 const gallery = document.querySelector('.gallery');
 
-let list = '';
-images.forEach(image => {
-  list += `
+// Генерація розмітки
+const galleryMarkup = images
+  .map(
+    ({ preview, original, description }) => `
     <li class="gallery-item">
-      <a class="gallery-link" href="${image.original}">
+      <a class="gallery-link" href="${original}">
         <img
           class="gallery-image"
-          src="${image.preview}"
-          data-source="${image.original}"
-          alt="${image.description}"
+          src="${preview}"
+          data-source="${original}"
+          alt="${description}"
         />
       </a>
-    </li>`;
-});
+    </li>
+  `
+  )
+  .join('');
 
-gallery.insertAdjacentHTML('beforeend', list);
+// розмітка в DOM за одну операцію
+gallery.insertAdjacentHTML('beforeend', galleryMarkup);
 
+// Делегування кліки по галереї
 gallery.addEventListener('click', event => {
   event.preventDefault();
 
-  if (event.target.nodeName !== 'IMG') return;
+  const isImage = event.target.classList.contains('gallery-image');
+  if (!isImage) return;
+
+  const largeImageURL = event.target.dataset.source;
 
   const instance = basicLightbox.create(`
-    <div class="modal">
-      <img src="${event.target.dataset.source}" alt="${event.target.alt}">
-      <h1>${event.target.alt}</h1>
-    </div>
+    <img src="${largeImageURL}" width="800" height="600" alt="${event.target.alt}">
   `);
 
   instance.show();
