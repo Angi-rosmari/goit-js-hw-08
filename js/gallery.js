@@ -68,38 +68,32 @@ const gallery = document.querySelector('.gallery');
 
 let list = '';
 images.forEach(image => {
-  list =
-    list +
-    `<li class="gallery-item">
-  <a class="gallery-link" href="${image.original}">
-    <img
-      class="gallery-image"
-      src="${image.preview}"
-      data-source="${image.original}"
-      alt="${image.description}"
-    />
-  </a>
-</li>`;
+  list += `
+    <li class="gallery-item">
+      <a class="gallery-link" href="${image.original}">
+        <img
+          class="gallery-image"
+          src="${image.preview}"
+          data-source="${image.original}"
+          alt="${image.description}"
+        />
+      </a>
+    </li>`;
 });
 
 gallery.insertAdjacentHTML('beforeend', list);
-gallery.addEventListener('click', clicEvent);
 
-function clicEvent(event) {
+gallery.addEventListener('click', event => {
   event.preventDefault();
 
-  if (event.target.nodeName !== 'IMG') {
-    return;
-  }
+  if (event.target.nodeName !== 'IMG') return;
 
   const instance = basicLightbox.create(`
-        <img src="${event.target.dataset.source}" alt="${event.target.alt}">
-        `);
+    <div class="modal">
+      <img src="${event.target.dataset.source}" alt="${event.target.alt}">
+      <h1>${event.target.alt}</h1>
+    </div>
+  `);
 
   instance.show();
-
-  // назва збільшеного зображення
-
-  const imageTitle = document.querySelector('.basicLightbox__placeholder');
-  imageTitle.insertAdjacentHTML('afterend', `<h1>${event.target.alt}</h1>`);
-}
+});
