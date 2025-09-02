@@ -66,38 +66,35 @@ const images = [
 
 const gallery = document.querySelector('.gallery');
 
-// Генерація розмітки
-const galleryMarkup = images
-  .map(
-    ({ preview, original, description }) => `
-    <li class="gallery-item">
-      <a class="gallery-link" href="${original}">
-        <img
-          class="gallery-image"
-          src="${preview}"
-          data-source="${original}"
-          alt="${description}"
-        />
-      </a>
-    </li>
-  `
-  )
+const markup = images
+  .map(({ preview, original, description }) => {
+    return `
+      <li class="gallery-item">
+        <a class="gallery-link" href="${original}">
+          <img
+            class="gallery-image"
+            src="${preview}"
+            data-source="${original}"
+            alt="${description}"
+          />
+        </a>
+      </li>
+    `;
+  })
   .join('');
 
-// розмітка в DOM за одну операцію
-gallery.insertAdjacentHTML('beforeend', galleryMarkup);
+gallery.innerHTML = markup;
 
-// Делегування кліки по галереї
 gallery.addEventListener('click', event => {
   event.preventDefault();
 
-  const isImage = event.target.classList.contains('gallery-image');
-  if (!isImage) return;
+  const clickedImage = event.target;
+  if (!clickedImage.classList.contains('gallery-image')) return;
 
-  const largeImageURL = event.target.dataset.source;
+  const largeImageURL = clickedImage.dataset.source;
 
   const instance = basicLightbox.create(`
-    <img src="${largeImageURL}" width="800" height="600" alt="${event.target.alt}">
+    <img src="${largeImageURL}" alt="${clickedImage.alt}" />
   `);
 
   instance.show();
